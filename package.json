@@ -7,7 +7,8 @@
     "build": "npm run clean:dist && npm run build-server",
     "start": "node ./dist/index.js",
     "dev": "NODE_ENV=development nodemon --exec babel-node ./src/index.js",
-    "test": "NODE_ENV=test jest --collect-coverage",
+    "test": "NODE_ENV=test jest --collect-coverage --detectOpenHandles",
+    "coveralls": "NODE_ENV=test jest --coverage && cat ./coverage/lcov.info | coveralls",
     "clean:dist": "rm -rf dist && mkdir dist",
     "build-server": "babel -d ./dist ./src",
     "lint": "eslint . --fix --max-warnings=1"
@@ -38,6 +39,7 @@
     "@babel/register": "^7.7.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^24.8.0",
+    "coveralls": "^3.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.7.0",
