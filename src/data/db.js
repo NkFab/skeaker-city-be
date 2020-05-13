@@ -5,13 +5,10 @@ dotenv.config();
 
 const connectDb = async () => {
   try {
-    await mongoose.connect(
-      "mongodb+srv://manzi:Nkaka@16628@cluster0-kjq0t.mongodb.net/sneakers-city",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      }
-    );
+    await mongoose.connect(process.env.DB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
     console.log("Connection Established");
     console.log("Server Listening");
   } catch (error) {
