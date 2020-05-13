@@ -17,4 +17,5 @@ server.use("*", (_req, res) =>
     error: { message: "API endpoint not found!" }
   })
 );
+
 export default server;
