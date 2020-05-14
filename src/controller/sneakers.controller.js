@@ -4,6 +4,7 @@ class SkeakersController {
   static async getAll(req, res) {
     try {
       const { page = 1 } = req.query;
+
       const options = {
         select: [
           "brand_name",
@@ -16,13 +17,10 @@ class SkeakersController {
         page,
         limit: 10
       };
-      return await Sneaker.paginate({}, options)
-        .then(sneakers => {
-          res.status(200).json({ sneakers });
-        })
-        .catch(err => {
-          console.log(err);
-        });
+
+      const sneakers = await Sneaker.paginate({}, options);
+
+      return res.status(200).json({ sneakers });
     } catch (error) {
       return res.status(500).json({ ...error });
     }
@@ -30,30 +28,35 @@ class SkeakersController {
 
   static async getOne(req, res) {
     const { id } = req.params;
+
     try {
-      return await Sneaker.findOne({ id })
-        .select([
-          "box_condition",
-          "brand_name",
-          "color",
-          "designer",
-          "details",
-          "main_picture_url",
-          "name",
-          "nickname",
-          "release_year",
-          "retail_price_cents",
-          "size_range",
-          "shoe_condition"
-        ])
-        .then(sneaker => {
-          res.status(200).json({ sneaker });
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      const sneaker = await Sneaker.findOne({ _id: id }).select([
+        "box_condition",
+        "brand_name",
+        "color",
+        "designer",
+        "details",
+        "main_picture_url",
+        "name",
+        "nickname",
+        "release_year",
+        "retail_price_cents",
+        "size_range",
+        "shoe_condition"
+      ]);
+
+      if (!sneaker) {
+        return res.status(404).json({ message: "Not found" });
+      }
+
+      return res.status(200).json({ sneaker });
     } catch (error) {
-      return res.status(500).json({ ...error });
+      switch (error.path) {
+        case "_id":
+          return res.status(400).json({ message: "Invalid id" });
+        default:
+          return res.status(500).json({ ...error });
+      }
     }
   }
 }
