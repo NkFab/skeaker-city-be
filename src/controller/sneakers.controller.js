@@ -29,9 +29,9 @@ class SkeakersController {
   }
 
   static async getOne(req, res) {
-    const { name } = req.params;
+    const { id } = req.params;
     try {
-      return await Sneaker.findOne({ name })
+      return await Sneaker.findOne({ id })
         .select([
           "box_condition",
           "brand_name",
